@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>РАМА — окна на заказ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    box-sizing:border-box;
+    --bg:#070f03;
+    --surface:#FFFFFF;
+    --ink:#1B2A33;
+    --ink-soft:#009dff;
+    --frame:#2E3A46;
+    --wood:#ff7b00;
+    --sky:#1d76aa;
+    --sky-deep:#3E7EA6;
+    --line:#D7DEE2;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark){
+      --bg:#12181C; --surface:#1A2226; --ink:#EDF2F4; --ink-soft:#A9B7BE;
+      --frame:#DDE4E7; --line:#2C363B;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12181C; --surface:#1A2226; --ink:#EDF2F4; --ink-soft:#A9B7BE;
+    --frame:#DDE4E7; --line:#2C363B;
+  }
+  html{scroll-padding-top:env(safe-area-inset-top,0px); scroll-behavior:smooth;}
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:'Source Sans 3',sans-serif; font-size:17px; line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{font-family:'Archivo',sans-serif; font-weight:800; letter-spacing:-0.02em; margin:0; color:var(--ink);}
+  a{color:inherit;}
+  img,svg{max-width:100%;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 24px;}
+  .btn{
+    display:inline-flex; align-items:center; gap:8px; justify-content:center;
+    font-family:'Archivo',sans-serif; font-weight:700; font-size:15px;
+    padding:14px 26px; border:2px solid var(--frame); cursor:pointer;
+    text-decoration:none; transition:transform .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-fill{background:var(--frame); color:var(--bg);}
+  .btn-line{background:transparent; color:var(--frame);}
+  @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+
+  header{
+    position:sticky; top:0; z-index:20; background:var(--bg);
+    border-bottom:1px solid var(--line);
+    padding-top:env(safe-area-inset-top,0px);
+  }
+  .nav{display:flex; align-items:center; justify-content:space-between; padding:18px 24px; max-width:1120px; margin:0 auto;}
+  .logo{font-family:'Archivo',sans-serif; font-weight:800; font-size:22px; letter-spacing:-0.01em;}
+  .logo span{color:var(--wood);}
+  .nav-links{display:flex; gap:28px; font-size:15px; font-weight:600; list-style:none; margin:0; padding:0;}
+  .nav-links a{text-decoration:none;}
+  [data-nav].active{color:var(--wood);}
+  .phone{font-family:'Archivo',sans-serif; font-weight:700; white-space:nowrap;}
+  .burger{display:none; background:none; border:none; cursor:pointer; padding:4px;}
+  .burger span{display:block; width:24px; height:2px; background:var(--ink); margin:5px 0;}
+
+  .hero{padding:64px 0 40px;}
+  .hero-grid{display:grid; grid-template-columns:1.1fr 1fr; gap:56px; align-items:center;}
+  .hero h1{font-size:clamp(34px,5vw,54px); line-height:1.05;}
+  .hero p.lead{color:var(--ink-soft); font-size:19px; max-width:46ch; margin:20px 0 28px;}
+  .hero-ctas{display:flex; gap:14px; flex-wrap:wrap;}
+  .window-art{position:relative;}
+  .pane-grid{
+    display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr 1fr;
+    border:10px solid var(--frame); aspect-ratio:4/5; overflow:hidden;
+  }
+  .pane{
+    background:linear-gradient(180deg,var(--sky) 0%, var(--sky-deep) 100%);
+    border:3px solid var(--frame);
+    opacity:0; transform:scale(.9);
+    animation:paneIn .5s ease forwards;
+  }
+  .pane:nth-child(1){animation-delay:.05s;}
+  .pane:nth-child(2){animation-delay:.15s;}
+  .pane:nth-child(3){animation-delay:.25s;}
+  .pane:nth-child(4){animation-delay:.35s;}
+
+.pane:nth-child(5){animation-delay:.45s;}
+  .pane:nth-child(6){animation-delay:.55s;}
+  @keyframes paneIn{to{opacity:1; transform:scale(1);}}
+
+  .section{padding:72px 0;}
+  .section-head{max-width:56ch; margin-bottom:36px;}
+  .section-head h2{font-size:clamp(26px,3.4vw,36px);}
+  .section-head p{color:var(--ink-soft); margin-top:10px;}
+  .products{display:grid; grid-template-columns:repeat(4,1fr); gap:0; border:2px solid var(--frame);}
+  .product{
+    padding:28px 22px; border-right:2px solid var(--frame);
+    display:flex; flex-direction:column; gap:10px; min-height:190px;
+  }
+  .product:last-child{border-right:none;}
+  .product .tag{font-family:'Archivo',sans-serif; font-weight:700; color:var(--wood); font-size:14px;}
+  .product h3{font-size:19px;}
+  .product p{color:var(--ink-soft); font-size:15px; margin:0;}
+
+  .benefits{border:2px solid var(--frame); display:grid; grid-template-columns:repeat(3,1fr);}
+  .benefit{
+    padding:30px 24px; border-right:2px solid var(--frame); border-bottom:2px solid var(--frame);
+  }
+  .benefit:nth-child(3n){border-right:none;}
+  .benefit:nth-last-child(-n+3){border-bottom:none;}
+  .benefit .num{font-family:'Archivo',sans-serif; font-weight:800; color:var(--sky-deep); font-size:14px;}
+  .benefit h3{font-size:18px; margin-top:8px;}
+  .benefit p{color:var(--ink-soft); font-size:15px; margin:6px 0 0;}
+
+  .steps{display:grid; grid-template-columns:repeat(4,1fr); gap:24px; counter-reset:step;}
+  .step{position:relative; padding-top:18px; border-top:3px solid var(--frame);}
+  .step .idx{font-family:'Archivo',sans-serif; font-weight:800; font-size:34px; color:var(--wood);}
+  .step h3{font-size:17px; margin:8px 0 6px;}
+  .step p{color:var(--ink-soft); font-size:14.5px; margin:0;}
+
+  .map-wrap{display:grid; grid-template-columns:1fr 1fr; gap:0; border:2px solid var(--frame);}
+  .map-info{padding:36px 34px; background:var(--surface);}
+  .map-info h2{font-size:24px; margin-bottom:18px;}
+  .info-row{display:flex; gap:14px; padding:12px 0; border-top:1px solid var(--line);}
+  .info-row:first-of-type{border-top:none;}
+  .info-row .k{font-weight:700; min-width:110px; font-family:'Archivo',sans-serif; font-size:14px;}
+  .info-row .v{color:var(--ink-soft);}
+  .map-canvas{position:relative; background:var(--sky); border-left:2px solid var(--frame); min-height:340px; overflow:hidden;}
+  .map-canvas svg{position:absolute; inset:0; width:100%; height:100%;}
+  .pin-tip{
+    position:absolute; background:var(--frame); color:var(--bg); font-size:13px;
+    font-family:'Archivo',sans-serif; font-weight:700; padding:8px 12px;
+    transform:translate(-50%,-124%); white-space:nowrap; pointer-events:none;
+    opacity:0; transition:opacity .15s ease;
+  }
+  .pin-tip.show{opacity:1;}
+
+  footer{border-top:1px solid var(--line); padding:36px 0; margin-top:16px;}
+  .foot-row{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;}
+  .foot-row nav{display:flex; gap:22px; font-size:14px;}
+  .foot-row nav a{text-decoration:none; color:var(--ink-soft);}
+  .fine{color:var(--ink-soft); font-size:13px; margin-top:18px;}
+
+  @media (max-width:860px){
+    .hero-grid{grid-template-columns:1fr;}
+    .nav-links{display:none;}
+    .burger{display:block;}
+    .products{grid-template-columns:1fr 1fr;}
+    .product{border-bottom:2px solid var(--frame);}
+    .product:nth-child(2n){border-right:none;}
+    .benefits{grid-template-columns:1fr 1fr;}
+    .benefit:nth-child(2n){border-right:none;}
+    .benefit:nth-child(3n){border-right:2px solid var(--frame);}
+    .benefit:nth-last-child(-n+2){border-bottom:none;}
+    .steps{grid-template-columns:1fr 1fr;}
+    .map-wrap{grid-template-columns:1fr;}
+  }
+  @media (max-width:520px){
+    .products{grid-template-columns:1fr;}
+    .product{border-right:none !important;}
+    .benefits{grid-template-columns:1fr;}
+    .benefit{border-right:none !important;}
+    .steps{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+11:55
+<div class="logo">РАМ<span>А</span></div>
+    <ul class="nav-links">
+      <li><a href="#home" data-nav>Главная</a></li>
+      <li><a href="#catalog" data-nav>Окна</a></li>
+      <li><a href="#benefits" data-nav>Преимущества</a></li>
+      <li><a href="#process" data-nav>Как мы работаем</a></li>
+      <li><a href="#contacts" data-nav>Контакты</a></li>
+    </ul>
+    <a class="phone" href="tel:+74951234567">+7 495 123-45-67</a>
+  </div>
+</header>
+
+<main>
+  <section class="page hero" id="home">
+    <div class="wrap hero-grid">
+      <div>
+        <h1>Окна, сквозь которые хочется смотреть</h1>
+        <p class="lead">Производим и устанавливаем ПВХ, алюминиевые и деревянные окна. Замер, расчёт и монтаж — от заявки до готового окна в среднем 8 дней.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-fill" href="#contacts">Оставить заявку</a>
+          <a class="btn btn-line" href="#catalog">Каталог окон</a>
+        </div>
+      </div>
+      <div class="window-art" aria-hidden="true">
+        <div class="pane-grid">
+          <div class="pane"></div><div class="pane"></div>
+          <div class="pane"></div><div class="pane"></div>
+          <div class="pane"></div><div class="pane"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page section" id="catalog" hidden>
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Четыре типа окон — один результат: тепло и тишина</h2>
+        <p>Подбираем конструкцию под задачу: квартира, загородный дом, балкон или веранда.</p>
+      </div>
+      <div class="products">
+        <div class="product">
+          <span class="tag">ПВХ</span>
+          <h3>Тёплые и доступные</h3>
+          <p>Профиль от 60 до 82 мм, до 5 камер. Оптимальны для квартир и дач.</p>
+        </div>
+        <div class="product">
+          <span class="tag">Алюминий</span>
+          <h3>Тонкая рама, панорамный вид</h3>
+          <p>Узкие импосты открывают максимум света. Для витражей и лоджий.</p>
+        </div>
+        <div class="product">
+          <span class="tag">Дерево</span>
+          <h3>Классика и дышащий материал</h3>
+          <p>Клеёный брус сосны или дуба, натуральное покрытие.</p>
+        </div>
+        <div class="product">
+          <span class="tag">Раздвижные</span>
+          <h3>Для балконов и веранд</h3>
+          <p>Экономят пространство, открывают вид без распашных створок.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page section" id="benefits" hidden>
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Что входит в каждый заказ</h2>
+      </div>
+      <div class="benefits">
+        <div class="benefit"><div class="num">10 лет</div><h3>Гарантия на фурнитуру и монтаж</h3><p>Письменный гарантийный талон на каждое окно.</p></div>
+        <div class="benefit"><div class="num">0 ₽</div><h3>Замер и расчёт</h3><p>Приезжаем в удобное время, считаем стоимость на месте.</p></div>
+        <div class="benefit"><div class="num">1 день</div><h3>Монтаж окна</h3><p>Демонтаж старого, установка нового, вывоз мусора.</p></div>
+        <div class="benefit"><div class="num">−30%</div><h3>К теплопотерям</h3><p>Энергосберегающий пакет стекла в каждой модели.</p></div>
+        <div class="benefit"><div class="num">Своё</div><h3>Производство</h3><p>Цех в городе — без наценки посредников.</p></div>
+        <div class="benefit"><div class="num">0%</div><h3>Рассрочка</h3><p>Разбиваем платёж на 4 месяца без переплат.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page section" id="process" hidden>
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Путь от заявки до нового окна</h2>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="idx">1</div><h3>Замер</h3><p>Выезжаем в течение суток, бесплатно.</p></div>
+        <div class="step"><div class="idx">2</div><h3>Расчёт и договор</h3><p>Фиксируем цену и сроки на бумаге.</p></div>
+11:55
+<div class="step"><div class="idx">3</div><h3>Производство</h3><p>Собираем окно на своём производстве, 5–10 дней.</p></div>
+        <div class="step"><div class="idx">4</div><h3>Монтаж</h3><p>Устанавливаем, убираем за собой, показываем уход.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page section" id="contacts" hidden>
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Приезжайте в шоурум или вызовите замерщика</h2>
+      </div>
+      <div class="map-wrap">
+        <div class="map-info">
+          <div class="info-row"><div class="k">Адрес</div><div class="v">Москва, ул. Заречная, 12</div></div>
+          <div class="info-row"><div class="k">Ориентир</div><div class="v">5 минут пешком от м. Речной вокзал</div></div>
+          <div class="info-row"><div class="k">Телефон</div><div class="v"><a href="tel:+74951234567">+7 495 123-45-67</a></div></div>
+          <div class="info-row"><div class="k">Часы работы</div><div class="v">Пн–Сб, 9:00–20:00</div></div>
+          <div style="margin-top:22px;">
+            <a class="btn btn-fill" href="tel:+74951234567">Позвонить</a>
+          </div>
+        </div>
+        <div class="map-canvas" id="mapCanvas">
+          <svg viewBox="0 0 400 340" preserveAspectRatio="xMidYMid slice">
+            <rect width="400" height="340" fill="#6FA8C9"></rect>
+            <rect x="0" y="150" width="400" height="26" fill="#DCEAF1"></rect>
+            <rect x="120" y="0" width="26" height="340" fill="#DCEAF1"></rect>
+            <rect x="0" y="230" width="400" height="18" fill="#DCEAF1" opacity="0.7"></rect>
+            <rect x="30" y="20" width="70" height="110" fill="#3E7EA6" opacity="0.55"></rect>
+            <rect x="180" y="20" width="90" height="110" fill="#3E7EA6" opacity="0.4"></rect>
+            <rect x="300" y="30" width="80" height="90" fill="#3E7EA6" opacity="0.5"></rect>
+            <rect x="30" y="200" width="70" height="110" fill="#3E7EA6" opacity="0.45"></rect>
+            <rect x="180" y="200" width="60" height="110" fill="#3E7EA6" opacity="0.35"></rect>
+            <rect x="270" y="180" width="110" height="130" fill="#3E7EA6" opacity="0.5"></rect>
+            <text x="14" y="167" font-family="Archivo, sans-serif" font-size="10" font-weight="700" fill="#2E3A46">ул. Заречная</text>
+            <text x="134" y="70" font-family="Archivo, sans-serif" font-size="10" font-weight="700" fill="#2E3A46" transform="rotate(90 134 70)">Набережный пр.</text>
+            <rect x="205" y="220" width="18" height="12" fill="#EDF4F7" stroke="#2E3A46" stroke-width="1"></rect>
+            <text x="196" y="245" font-family="Archivo, sans-serif" font-size="9" fill="#2E3A46">парковка</text>
+            <g id="pinParking" style="cursor:pointer;">
+              <circle cx="214" cy="215" r="6" fill="#6FA8C9" stroke="#2E3A46" stroke-width="2"></circle>
+            </g>
+            <g id="pin" style="cursor:pointer;">
+              <circle cx="150" cy="175" r="9" fill="#2E3A46"></circle>
+              <path d="M150 175 L150 200 L142 192 M150 200 L158 192" stroke="#2E3A46" stroke-width="3" fill="none" stroke-linecap="round"></path>
+              <circle cx="150" cy="175" r="16" fill="none" stroke="#2E3A46" stroke-width="2" opacity="0.5"></circle>
+            </g>
+            <g transform="translate(360,30)">
+              <circle r="16" fill="#FFFFFF" opacity="0.85" stroke="#2E3A46" stroke-width="1.5"></circle>
+              <path d="M0 -10 L4 4 L0 1 L-4 4 Z" fill="#2E3A46"></path>
+              <text x="0" y="-18" text-anchor="middle" font-family="Archivo, sans-serif" font-size="9" font-weight="700" fill="#2E3A46">С</text>
+            </g>
+          </svg>
+          <div class="pin-tip" id="pinTip" style="left:37.5%; top:51%;">ул. Заречная, 12 — шоурум</div>
+          <div class="pin-tip" id="parkingTip" style="left:53.5%; top:63%;">Бесплатная парковка</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+11:55
+<div class="foot-row">
+      <div class="logo">РАМ<span>А</span></div>
+      <nav>
+        <a href="#home" data-nav>Главная</a>
+        <a href="#catalog" data-nav>Окна</a>
+        <a href="#benefits" data-nav>Преимущества</a>
+        <a href="#process" data-nav>Работа</a>
+        <a href="#contacts" data-nav>Контакты</a>
+      </nav>
+      <a class="phone" href="tel:+74951234567">+7 495 123-45-67</a>
+    </div>
+    <p class="fine">© 2026 РАМА. Схема на карте приведена условно.</p>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    function wire(pinId, tipId){
+      var pin = document.getElementById(pinId);
+      var tip = document.getElementById(tipId);
+      if(!pin || !tip) return;
+      var shown = false;
+      function toggle(){ shown = !shown; tip.classList.toggle('show', shown); }
+      pin.addEventListener('click', toggle);
+      pin.addEventListener('mouseenter', function(){ tip.classList.add('show'); });
+      pin.addEventListener('mouseleave', function(){ if(!shown) tip.classList.remove('show'); });
+    }
+    wire('pin', 'pinTip');
+    wire('pinParking', 'parkingTip');
+  })();
+
+  (function(){
+    var pages = ['home','catalog','benefits','process','contacts'];
+    function route(){
+      var hash = (location.hash || '#home').slice(1);
+      if(pages.indexOf(hash) === -1) hash = 'home';
+      pages.forEach(function(id){
+        var el = document.getElementById(id);
+        if(el) el.hidden = (id !== hash);
+      });
+      document.querySelectorAll('[data-nav]').forEach(function(a){
+        a.classList.toggle('active', a.getAttribute('href') === '#' + hash);
+      });
+      window.scrollTo(0, 0);
+    }
+    window.addEventListener('hashchange', route);
+    document.addEventListener('DOMContentLoaded', route);
+  })();
+</script>
+
+</body>
+</html>
